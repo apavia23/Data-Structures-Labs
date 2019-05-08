@@ -12,9 +12,7 @@ public class LinkedList<T> {
 	}
 	
 	public void add(T data1, T data2) {
-		Node newNode = new Node(data1, data2);
-		newNode.next = null;
-		
+		Node newNode = new Node(data1, data2);	
 		if(head == null) {
 			head = newNode;
 		}else {
