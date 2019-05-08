@@ -27,10 +27,9 @@ public class BankSimRunner {
 		
 		Scanner kb = new Scanner(System.in);
 
-		System.out.println("Enter the number of tellers to simulate: ");
+		System.out.print("Enter the number of tellers to simulate: ");
 		int tellers = kb.nextInt();
 		kb.close();
-		System.out.println(tellers);
 		int runtime = 0;
 		Customer[] line = new Customer[50];
 		int combinedTotal = 0;
