@@ -2,17 +2,13 @@ package lab2;
 
 import java.util.NoSuchElementException;
 
-public class LinkedList<T> {
+public class LinkedList {
 	private Node head;
-
-	public void insertFirst(T data1, T data2) {
-		Node newNode = new Node(data1, data2);
-		newNode.next = head;
-		head = newNode;
-	}
 	
-	public void add(T data1, T data2) {
-		Node newNode = new Node(data1, data2);	
+	public void add(Customer newCust) {
+		Node newNode = new Node(newCust);
+		newNode.next = null;
+		
 		if(head == null) {
 			head = newNode;
 		}else {
@@ -20,20 +16,6 @@ public class LinkedList<T> {
 			while(n.next != null) {
 				n = n.next;
 			}
-			n.next = newNode;
-		}
-	}
-	
-	public void insert(T data1, T data2, int index) {
-		Node newNode = new Node(data1, data2);
-		if(head == null) {
-			head = newNode;
-		}else {
-			Node n = head;
-			for(int i = 0; i < index - 1; i++) {
-				n = n.next;
-			}
-			newNode.next = n.next;
 			n.next = newNode;
 		}
 	}
@@ -48,31 +30,51 @@ public class LinkedList<T> {
 		}
 	}
 	
-	//Will not remove if it is the only element in list. use removeFirst()
-	public void removeLast() {
-		if(head == null) {
-			throw new NoSuchElementException();
-		}else {
-			Node n = head;
-			while(n.next.next != null) {
+	public void doTellerProcess(int tellers) {
+		Node n = head;
+		for(int i = 0; i < tellers; i++) {
+			n.customer.dos--;
+			if(n.next != null) {
 				n = n.next;
+			}else {
+				break;
 			}
-			n.next = null;
 		}
 	}
 	
-	public void remove(int index) {
-		if(head == null) {
-			throw new NoSuchElementException();
-		}else {
-			Node n = head;
-			for(int i = 0; i < index - 1; i++) {
-				n = n.next;
+	public int returnFinishedCustomersArrivalTimes(int tellers) {
+		Node n = head;
+		int retVal = 0;
+		for(int i = 0; i < tellers; i++) {
+			if(n.customer.dos == 0) {
+				retVal = retVal + n.customer.arrivalTime;				
 			}
-			Node n2 = n.next;
-			n.next = n2.next;
-			n2.next = null;
+			if(n.next != null) {
+				n = n.next;
+			}else {
+				break;
+			}
 		}
+		return retVal;
+	}
+	
+	public void removeFirstIfFinished() {
+		if(head.customer.dos == 0) {
+			Node n = head.next;
+			head.next = null;
+			head = n;
+		}
+	}
+	
+	public void removeRestIfFinished(int tellers) {
+		for(int i = 0; i < tellers; i++) {
+			Node n = head;
+			
+		}
+	}
+	
+	public boolean isEmpty() {
+		if(head = null)
 	}
 	
 	public void print(int index) {
@@ -83,7 +85,7 @@ public class LinkedList<T> {
 			for(int i = 0; i < index; i++) {
 				n = n.next;
 			}
-			System.out.println(n.data1 + ", " + n.data2);
+			System.out.println(n.customer.total);
 		}
 	}
 	
@@ -93,21 +95,19 @@ public class LinkedList<T> {
 		}else {
 			Node n = head;
 			do {
-				System.out.println(n.data1 + ", " + n.data2);
+				System.out.println(n.customer.total);
 				n = n.next;
 			}while(n.next != null);
-			System.out.println(n.data1 + ", " + n.data2);
+			System.out.println(n.customer.total);
 		}
 	}
 	
 	class Node {
-		public T data1;
-		public T data2;
+		public Customer customer;
 		public Node next;
 		
-		Node(T input1, T input2){
-			data1 = input1;
-			data2 = input2;
+		Node(Customer input){
+			customer = input;
 		}
 	}
 }
