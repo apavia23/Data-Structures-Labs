@@ -1,7 +1,5 @@
 package btreeLab;
 
-import lecture.BinaryTree.TNode;
-
 public class BinaryTree {
 	TNode root;
 	
@@ -33,33 +31,59 @@ public class BinaryTree {
 		}	
 	}
 	
-	void preOrder(TNode root) {
+	void printPreOrder()   { preOrder(root);   }
+    void printInOrder()    { inOrder(root);    }
+    void printPostOrder()  { postOrder(root);  } 
+    void printLevelOrder() { levelOrder(root); }
+    void remove(int key)   { removeNumRec(root, key); }
+    boolean search(int key) { return search(root, key); }
+	
+	private void preOrder(TNode root) {
 		if(root == null) {
 			return;
 		}
-		System.out.println(root.data);
+		System.out.print(root.data + " ");
 		preOrder(root.left);
 		preOrder(root.right);
 	}
 	
-	void inOrder(TNode root) {
+	private void inOrder(TNode root) {
 		if(root == null) {
 			return;
 		}
 		inOrder(root.left);
-		System.out.println(root.data);
+		System.out.print(root.data + " ");
 		inOrder(root.right);
 	}
 	
-	void postOrder(TNode root) {
+	private void postOrder(TNode node) {
+		if(node == null) {
+			return;
+		}
+		postOrder(node.left);
+		postOrder(node.right);
+		System.out.print(root.data + " ");
+	}
+	
+	private void levelOrder(TNode root) {
+		int height = maxDepth(root);
+		for(int i = 0; i <= height; i++) {
+			printCurrentLevel(root, i);
+		}
+	}
+	
+	private void printCurrentLevel(TNode root, int level) {
 		if(root == null) {
 			return;
 		}
-		postOrder(root.left);
-		postOrder(root.right);
-		System.out.println(root.data);
+		if(level == 1) {
+			System.out.print(root.data + " ");
+		} else if(level > 1) {
+			printCurrentLevel(root.left, level - 1);
+			printCurrentLevel(root.right, level - 1);
+		}
 	}
-	
+
 	int maxDepth(TNode node){ 
 		if (node == null) {
         	return 0;
@@ -75,19 +99,49 @@ public class BinaryTree {
         }
 	}
 
-	int search(TNode root, int x) throws NullPointerException {
-		if(root == null) {
-			throw new NullPointerException("Data Tree Doesn't Exist");
+	private boolean search(TNode node, int key) {  
+	    if (node == null) {
+	    	return false;
+	    }
+	    
+	    if (node.data == key) {
+	    	return true;	
+	    }
+	    boolean res1 = search(node.left, key);    
+	    boolean res2 = search(node.right, key);
+	    
+	    return res1 || res2;
+	}
+	
+	int minValue(TNode root){
+		int min = root.data;
+		while (root.left != null){
+			min = root.left.data;
+			root = root.left;
 		}
-		if(root.data != x) {
-			if(x <= root.data) {
-				search(root.left, x);
-			}else {
-				search(root.right, x);
-			}
-		}else {
-			return x;
+		return min;
+	} 
+	
+	private TNode removeNumRec(TNode root, int key) {
+		if (root == null) {
+	    	return root;
+	    }
+		
+		if (key < root.data) {
+            root.left = removeNumRec(root.left, key);
 		}
+        else if (key > root.data) {
+            root.right = removeNumRec(root.right, key);
+        }else {
+        	if(root.left == null) {
+        		return root.right;
+        	}else if(root.right == null) {
+        		return root.left;
+        	}
+        	root.data = minValue(root.right);
+        	removeNumRec(root.right, root.data);
+        }
+		return root;
 	}
 	
 	class TNode {
